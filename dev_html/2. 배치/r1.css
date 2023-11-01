@@ -1,0 +1,22 @@
+* {
+    border: 1px solid red;
+}
+
+
+
+.container {
+    background-color: black; 
+    position: relative;   
+}
+div {
+    width: 100px;
+    height: 100px;
+    background-color: aquamarine;
+    margin-bottom: 10px;
+}
+.box {
+    background-color: red;
+    position: absolute;
+    left: 20px;
+    top: 20px;
+}

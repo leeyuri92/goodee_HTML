@@ -1,0 +1,28 @@
+* {  /* 여백까지 계산된 박스 */
+    box-sizing: border-box;
+    border: 1px solid black;
+}
+.wrap {
+    width: 300px;
+    height: 600px;
+    border: 10px solid rgb(231, 230, 133);
+    margin: 100px auto;  
+    /* 바깥쪽 위아래 여백, 양 옆 여백 */
+    
+}
+.wrap .box1 {
+    width: 280px;
+    height: 290px;
+    background-color: aquamarine;
+    
+    /* 현재 레이아웃에 영향을 주지 않으면서 이동하기 */
+    position: relative;
+    top : -50px;
+    left: 50px;
+
+}
+.box2 {
+    width: 280px;
+    height: 290px;
+    background-color: rgb(166, 232, 138);
+}

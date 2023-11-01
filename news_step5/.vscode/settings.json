@@ -1,0 +1,9 @@
+// 로컬셋팅을 별도로 처리 가능하다.
+{
+  "editor.fontSize": 12,
+  "[javascript]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.maxTokenizationLineLength": 2500
+  }
+}

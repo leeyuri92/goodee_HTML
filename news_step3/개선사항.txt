@@ -1,0 +1,13 @@
+1-3 개선점
+lajax - 비동기처리 방식 (관심사) - 표준을 기본 - jquery인정 - 표준아니다.
+new XMLHttpRequest();
+어떤 코드가 반복되었나?
+
+title ur1 content url
+open ("GET", url, false)
+send
+
+개선할 문제 2
+DOM API가 제공하는 createElement(), appendchald()
+DOM Tree잘 그려지지 않는다.
+양이 늘어나더라도 DoM Tree잘 보이는 코드 더 직관적이어서 유지보수 이롭다.

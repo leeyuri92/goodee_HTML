@@ -1,0 +1,72 @@
+* {
+  box-sizing: border-box;  /* 딱 맞추기 위해 */
+  border: 1px solid red; /* 가이드라인 */
+}
+
+ul {
+  list-style: none;
+}
+
+header {
+  width: 100%;          /* 4 반응형웹 */
+  display: flex;        /* 5 ul>li 로우가 늘어남, 좌우펼쳐짐 */
+  justify-content: space-between;  /* 6 flex사용가능 */
+  align-items: center;             /* 7 위아래 중앙 배치 */
+  top: 0px;             /* 8 왼쪽 상단 모서리 바짝 붙임 */
+  left: 0px;            /* 9 */
+  color:white;        /* 10 글씨색상 */
+  z-index: 2;           /* 숫자가 클수록 위에 얹혀짐 */
+}
+
+header h1 {             /* 메뉴바의 사이트명 */
+  font: bold 24px;      /* 11 굵은글씨 */
+  color: white;       /* 12 글자색 */
+  z-index: 2;           /* 13 영상 위에 보이기 */
+}
+
+header .gnb li {        /* 메뉴바 li 구성 글자사이 간격 */
+  margin: 0px 20px ;    /* 14 메뉴글자 외부여백*/
+}
+
+.gnb {                  /* 글자 메뉴바 */
+  display: flex;    
+  z-index: 2;
+}
+.sns {                  /* 소셜 메뉴바 */
+  display: flex;
+  z-index: 2;
+}
+header .sns li {        /* 하위폴더 공백으로 구분 */  
+  margin:  0px 10px;    /* 글자가 없어서 여백만 줌 */
+}
+header .sns li a {
+  font-size: 16px;      /* 이미지가 너무 작아서 키움 */
+  color: white; 
+}
+div {
+  /* 비디오컨텐츠 */
+  width: 100%;          /* 영상이 화면 꽉 차게 */ 
+  height: 100vh;        /* 스크롤바 싫고, 화면은 꽉차게 */
+  position: absolute;   /* 모서리에 빈틈없이 채우기 */
+  top: 0px;             /* 모서리에 빈틈없이 채우기 */
+  left: 0px;            /* 모서리에 빈튼없이 채우기 */
+  overflow: hidden;     /* 스크롤바 숨기기 */
+  z-index: 1;           /* 젤 안쪽에 배치 */
+}
+div video {
+  width: 100%;          /* 영상이 화면비율을 맞춰 꽉 채움 */
+  height: 100%;         /* 영상이 화면비율을 맞춰 꽉 채움 */
+  object-fit: cover;    /* 영상이 화면비율에 맞춰 꽉 채움 */
+}
+
+footer {                /* 바닥글 */
+  width: 100%;
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  font: 0.9em/1 "arial";      /* 굵은글씨 */
+  color: white;       /* 글자색 */
+  z-index: 2;
+  text-align: center;   
+  letter-spacing: 2px;
+}

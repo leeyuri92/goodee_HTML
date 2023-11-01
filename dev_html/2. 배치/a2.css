@@ -1,0 +1,42 @@
+
+
+.wrap{
+  width: 550px;
+  border : 10px solid black;
+  margin: 30px auto;
+}
+.wrap .left {
+  width: 200px;
+  height: 200px;
+  background-color: palegoldenrod;
+  float: left;
+}
+.wrap .right {
+  width: 300px;
+  height: 100px;
+  background-color: paleturquoise;
+  float: left;
+  position: relative;
+}
+.right p{
+  width: 100px;
+  height: 100px;
+  background-color: gray;
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+}
+
+.wrap .bottom{
+  width: 250px;
+  height: 250px;
+  background-color: pink;
+  /* clear: both; */
+  /* float: left; */
+}
+.wrap::after{
+  content: "가상선택자";
+  background-color: rgb(204, 231, 165);
+  display: block;
+  clear: both;
+}
