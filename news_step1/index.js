@@ -1,5 +1,7 @@
 const ajax = new XMLHttpRequest();  // 브라우저가 비동기처리를 위해 제공하는 내장객체임
-const NEWS_URL = 'https://api.hnpwa.com/v0/news/1.json';
+
+const NEWS_URL = 'https://api.hnpwa.com/v0/news/1.json';  // 서버측 소통
+
 // open은 XMLHttpRequest 객체가 제공하는 함수로 파라미터는 3개가 필요함
 // 1.전송방식 2. 요청하는 URL, 3. true:동기, false:비동기 처리로 요청해줌
 // ajax변수는 XMLHttpRequest를 참조하는 변수명임

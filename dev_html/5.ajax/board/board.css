@@ -1,0 +1,13 @@
+body {
+    text-align: center;
+}
+table {
+    margin: auto;
+    border: 4px solid green;
+}
+th, td{
+    border: 1px dotted lightgray;
+}
+th {
+    background-color: rgba(210, 230, 236, 0.638);
+}
