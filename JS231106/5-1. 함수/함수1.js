@@ -1,0 +1,3 @@
+calcRectArea = (width, height) => {
+  
+}
