@@ -16,14 +16,27 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick-theme.min.css"
     />
-  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.js"></script>
+
   </head>
   <body>
     <div class="container">
       <%-include("header.ejs")%>
+
+      <div id="loading" class="row my-5">
+        <div class="col my-5"><img src="/images/loading.gif" alt="로딩이미지"></div>
+      </div>
+
       <%-include(pageName)%>
       <%-include("footer.ejs")%>
     </div>    
   </body>
+  <script>
+    $(document).on('ready',()=>{
+      setTimeout(()=>{
+        $('#loading').hide()
+        },1000)
+    })
+  </script>
 </html>
 

@@ -21,10 +21,13 @@
          -->
         <button class="btn btn-success w-100">로그인</button>
       </div>
-      <div class="text-end mt-3"><a href="/users/join">회원가입</a></div>
+      <!-- 경로는 users.js 확인할것 -->
+      <div class="text-end mt-3"><a href="users/join">회원가입</a></div>
     </form>
   </div>
 </div>
+
+
 <script type="module">
   import { app } from "/javascripts/firebase.js";
   import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js"

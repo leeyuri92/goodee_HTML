@@ -8,5 +8,8 @@ router.get('/', function(req, res, next) {
 router.get('/cart', function(req, res, next) {
   res.render('index',{title : '장바구니', pageName : 'users/cart.ejs'}); /* 화면을 출력 */
 });
+router.get('/join', function(req, res, next) {
+  res.render('index',{title : '회원가입', pageName : 'users/join.ejs'}); 
+});
 
 module.exports = router;

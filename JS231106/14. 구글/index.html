@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>도서관리시스템-html활용코드</title>
+</head>
+<body>
+  <button id="btnLogin">로그인</button>
+  <button id="btnLogout">로그아웃</button>
+  <script type="module">
+    import {app} from '../service/firebase.js';      // app은 여기 주소에서 
+    import {getAuth} from 'https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js' //  getAuth는 여기주소에서
+    import AuthLogic from '../service/authLogic.js'  
+    import {loginGoogle, logout} from '../service/authLogic.js'  
+    const auth = getAuth(app);    
+    const authLogic = new AuthLogic();       // AuthLogic은 class라서 인스턴스화
+    console.log(authLogic.googleProvider);   // 잘 연결 됬는지 확인^^  
+    const btnLogic = document.querySelector('#btnLogin')
+
+    btnLogin.addEventListener('click',async(event) => {
+      console.log('로그인버튼');
+      event.preventDefault();
+      const result = await loginGoogle(auth, authLogic.googleProvider); // 너의 응답이 올때까지 다른짓안하고 기다릴게
+      console.log(result.uid);
+      console.log(result.displayName);
+      console.log(result.email);
+    })
+
+    const btnLogout = document.querySelector('#btnLogout')
+    btnLogout.addEventListener('click',(event) =>{
+      logout(auth)
+    })
+ 
+  </script>
+</body>
+</html>

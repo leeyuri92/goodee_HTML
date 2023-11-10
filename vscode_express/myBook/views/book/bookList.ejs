@@ -9,29 +9,129 @@
   </div>
 </div>
 <hr />
+<!-- 카카오 도서검색 결과를 출력할 공간 마련하기 시작 -->
 <div class="row" id="list_book"></div>
-<div class="text-center mt-2">
-  <button class="btn btn-primary btn-sm px-5" id="prev">이전</button>
-  <span id="page" class="px-3">1/10</span>
-  <button class="btn btn-primary btn-sm px-5" id="next">다음</button>
-</div>
+<!-- 카카오 도서검색 결과를 출력할 공간 마련하기 끄읏 -->
+<!-- Handlebars Helper 추가 -->
 <script>
-  const bookList = () => {
-    $.ajax({
-      type : 'get',
-      url:" https://dapi.kakao.com/v3/search/book.json?target=title",
-      headers : {Authorization : "KakaoAK eead243643c8e51d68e243c70e5b0823"},
-      data : {query:'자바', page:1, size :5},
-      dataType : 'JSON',
-      success : function(data){
-        console.log(data); // [object Object]로 뜨면 JSON.stringify() 로 알아먹을수 있는 언어로 바꿔줘
-      },
-      error : function(error){
-        console.log(error);
-      }
-    }) // 비동기처리통신
-  } // bookList
-  bookList()
+  // 가격포멧형식 - 정규표현식
+  Handlebars.registerHelper('format',function(price){
+    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + '원';
+  })
+  // thumbnail이 없을 때 더미이미지로 대체
+  Handlebars.registerHelper("image", function(thum){
+    if(thum) return thum;
+    else return "https://via.placeholder.com/120x174";
+  })
 </script>
+  <!-- Handlebars Helper 추가 -->
+
+<!-- list_book 안에 들어갈 템플릿 작성하기 -->
+    <script id="temp_book" type="text/x-handlebars-template">
+      <!-- #뒤에 이름을 알기위해 postmanㄱㄱ -->
+      {{#each documents}}
+      <div class="col-6 col-md-4 col-lg-2"> 
+      <!-- 1개로우에 6개씩 중간은 4개씩 라지는 2개씩 -->
+        <div class="card my-2">
+          <!-- card안에 margin 2마디 -->
+          <div class="card-body">
+            <img src="{{image thumbnail}}" index = "{{@index}}" alt="도서이미지" style="cursor:pointer; width: 80%;" >
+            <div class="mt-2">
+              {{ title }}
+            </div>
+          </div>
+          <div class="card-footer" style="font-size: 0.8rem;">
+            <div class="text-center">
+              {{ format price }}
+              <span class="cart ms-3" style="cursor: pointer;color: green;">CART</span>
+            </div>
+          </div>
+        </div>
+      </div> 
+      {{/each}}
+    </script>    
+    
+    <div class="text-center mt-2">
+      <button class="btn btn-primary btn-sm px-5" id="prev">이전</button>
+      <span id="page" class="px-3">1/10</span>
+      <button class="btn btn-primary btn-sm px-5" id="next">다음</button>
+    </div>
+    <script>
+      // 사용자가 입력한 키워드 가져오기
+      let query = $(frm.query).val();
+      let page = 1;
+
+    //  DOM에 대한 접근 방법 1
+    //  document.getElementById('m_id')
+    //  DOM에 대한 접근 방법 2 - jQuery(1.12.0.js)
+    //  $('#m_id')  or $('.m_id') or $('frm')
+    //  jQuery가 표준은 아니다.
+    //  표준은 변하지 않아서 다른 라이브러리가 나와도 호환됨
+    
+      // 다음 버튼을 눌렀을 때 - page 1씩 증가
+      $('#next').on('click',() => {
+        page++;
+        bookList();
+      })
+      
+      // 이전 버튼을 눌렀을 때 - page 1씩 감소
+      $('#prev').on('click',() => {
+        page--;
+        bookList();
+      })
+
+      // 도서이미지를 클릭 했을 때 도서 식별자 가져오기
+      $('#list_book').on('click','.card img',() =>{
+        let index = $(this).attr("index")    // this = img태그 <img index=1>
+        console.log(`사용자가 선택한 이미지 index값은 ${index}`);
+
+      })
+      const bookList = () => {
+        $.ajax({
+          type : 'get',
+          url:" https://dapi.kakao.com/v3/search/book.json?target=title",
+          headers : {Authorization : "KakaoAK eead243643c8e51d68e243c70e5b0823"},
+          data : {query:query, page:page, size :20},
+          dataType : 'JSON',
+          success : function(data){
+            console.log(data); // [object Object]로 뜨면 JSON.stringify() 로 알아먹을수 있는 언어로 바꿔줘
+          // 핸들바스 템플릿 호출
+          const temp = Handlebars.compile($('#temp_book').html()) 
+          // 위에서 읽어온 템플릿(반복) 결과를 div태그 내부에 끼워넣기- 껍데기만 있으니까
+          $('#list_book').html(temp(data)) 
+          let is_end = data.meta.is_end;
+          console.log(`마지막 페이지 : ${is_end}`);
+          let total = data.meta.total_count;
+          console.log(`검색결과 총 레코드 수 : ${total}`);
+          
+          let last = Math.ceil(total/20);
+          // 바뀐 페이지 번호
+          $('#page').text(`${page}/${last}`)
+          // 첫번째 페이지일 경우 이전버튼 비활성화
+          if(page===1)$('#prev').attr('disabled',true);
+          else $('#prev').attr('disabled',false);
+          if(is_end)$('#next').attr('disabled',true);
+          else $('#next').attr('disabled',false);
+
+          },
+          error : function(error){
+            console.log(error);
+          }
+        }) // 비동기처리통신
+      } // bookList
+      bookList()
+      //submit 새로고침 방어하기
+      $(frm).on('submit',e=>{
+        e.preventDefault()
+        query = $(frm.query).val();
+        page = 1;
+        bookList()
+      })
+
+
+    </script>
+
+<!-- list_book 안에 들어갈 템플릿 작성하기  끝 -->
+
 
 <!-- {}는 객체이다. 그럼 안에 내용은 키와 벨류로 넣는다 -->

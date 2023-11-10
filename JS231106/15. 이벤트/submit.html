@@ -17,7 +17,15 @@
   <input type="text" name="mem_id" id="mem_id">
   <input type="button" value="타입버튼 로그인" onclick="login(event)" >
  <!-- input 타입의 버튼은 submit기능이 없다 -->
-  <button>버튼태그 로그인</button>
+  <button id="btnLogin">버튼태그 로그인</button>
+  <script>
+    const flogin = document.querySelector('#f_login')
+    const login2 = (event) =>{
+      event.preventDefault();
+      console.log(event);
+    }
+    flogin.addEventListener('submit',login2)
+  </script>
 </form>
 </body>
 </html>

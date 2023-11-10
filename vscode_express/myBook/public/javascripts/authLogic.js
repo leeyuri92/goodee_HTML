@@ -22,13 +22,22 @@ export default AuthLogic;
 export const loginGoogle = (params) => {
   return new Promise((resolve, reject) => {
     signInWithEmailAndPassword(auth, googleProvider)
-      .then((result) => {})
+      .then((result) => {
+        console.log(result);//object Object - 안보임 - uid, displayName-realname, email
+      console.log(JSON.stringify(result));
+      const user = result.user;
+      localStorage.setItem('uid',user.uid)
+      localStorage.setItem('displayName',user.displayName)
+      localStorage.setItem('email',user.email)
+      resolve(user)
+      })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
       });
   });
 }; //end of loginGoogle
+
 export const loginKakao = (params) => {
   return new Promise((resolve, reject) => {
     try {
