@@ -26,7 +26,6 @@
   padding: 0.5rem 0.2rem;
 }
 
-
 /* ul 태그작성 */
 .videos {
   display: grid;
@@ -36,6 +35,12 @@
   margin: 0px;
   gap: 14px;
 }
+.container {
+  width: 100%;
+  padding: 0.2rem;
+}
+
+/* li태그  */
 .video {
   display: flex;
   height: 100%;

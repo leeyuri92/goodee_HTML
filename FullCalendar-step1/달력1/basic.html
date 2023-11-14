@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>실습 - 기본달력 테스트</title>
+  <!-- CDN 방식으로 소스 가져오기 -->
+
+  <script src='https://cdn.jsdelivr.net/npm/fullcalendar/index.global.min.js'></script>
+    <script>
+
+      document.addEventListener('DOMContentLoaded', function() {
+        const calendarEl = document.querySelector('#calendar') 
+        // 카렌더 객체 생성하기 및 생성자 호출 - 초기화, 속성값 지정
+        const calendar = new FullCalendar.Calendar(calendarEl, {
+          initialView: 'dayGridMonth', // 초기화된 부분
+          headerToolbar : {
+            left : 'prev, next today',
+            center : 'title',
+            right : 'dayGridWeek, timeGridWeek, listWeek'
+          },
+          // 일정에 대한 데이터셋 가져오기
+          events : [
+            {
+              title : '월간회의',
+              start : '2023-11-01'
+            },
+            {
+              title : '휴가일정',
+              start : '2023-11-10',
+              end : '2023-11-14'
+            },
+            {
+              title : '시험기간',
+              start : '2023-11-11',
+              end : '2023-11-19'
+            },
+            {
+              groupId : 999,
+              title : '그룹',
+              start : '2023-11-17T15:00:00'
+            },
+            {
+              groupId : 999,
+              title : '그룹2',
+              start : '2023-11-17T19:00:00'
+            },
+            
+          ]
+
+
+
+        })
+        calendar.render()  // 위에서 초기화된 정보로 달력을 그려줘
+      })
+
+    </script>
+
+
+
+
+</head>
+<body>
+  <div id="calendar"></div>
+</body>
+</html>
