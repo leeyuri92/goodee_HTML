@@ -1,0 +1,4 @@
+div#d_pic{
+  /* 부모의 기준으로 바뀐다 앱솔루트 */
+  position: absolute;
+}
