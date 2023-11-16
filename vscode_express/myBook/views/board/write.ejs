@@ -1,0 +1,60 @@
+<!-- 이 화면을 띄우기 위해 라우팅이 필요하다. -->
+
+<div class="row my-5">
+  <div class="col">
+      <h1 class="text-center mb-5">글쓰기</h1>
+      <form name="frm" method="post">
+          <input class="form-control my-2" name="title" placeholder="제목을 입력하세요.">
+          <textarea class="form-control" name="body" rows="10" placeholder="내용을 입력하세요."></textarea>
+          <div class="text-center my-2">
+              <button class="btn btn-primary">글등록</button>
+              <button class="btn btn-secondary" type="reset">등록취소</button>
+          </div>
+      </form>
+  </div>
+</div>
+<!-- 외부에서 제공되는 라이브러리 사용 -->
+<script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
+<script type="module">
+  import {app} from "/javascripts/firebase.js";
+  import{
+    getFirestore,
+    collection,
+    addDoc
+  } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+  const db = getFirestore(app);
+
+  $(frm).on("submit",async (event) => {
+    // submit이슈로 인해 새로고침 사이드이펙트 방지 
+    event.preventDefault();
+    let title = $(frm.title).val(); // 사용자가 입력한 제목
+    let body = $(frm.body).val();
+    
+    // 유효성 검사 추가
+    if(title ==""||body==""){
+      $("#modal-alert .modal-body").html("제목 또는 내용을 입력하세요.");
+      $("#modal-alert").modal("show");
+    }
+    // 제목과 내용을 모두 작성 햇을 때
+    else{
+      let email = localStorage.getItem("email"); // email로그인 성공 후 로컬스토리지에 저장된 정보를 작성자로 설정
+      let date = moment(new Date()).format("YYYY-MM-DD HH:mm:ss");
+      console.log(`${title},${body},${email},${date}`);      
+      // collection 값을 폴더명으로 생각함
+      await addDoc(collection(db,"board"),{  // posts 자리에 board가 생성됨
+        email:email,
+        title:title,
+        body:body,
+        date:date
+      });
+      location.href="/board";
+    }
+  })
+</script>
+<!-- Firestore Database 
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js';
+
+import { ??? } from 'https://www.gstatic.com/firebasejs/9.22.1/firebasestore.js';
+<script src="https://www.gstatic.com/firebasejs/10.6.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.6.0/firebase-firestore-compat.js"></script>
+-->

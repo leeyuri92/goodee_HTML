@@ -24,11 +24,18 @@
       <%-include("header.ejs")%>
 
       <div id="loading" class="row my-5">
-        <div class="col my-5"><img src="/images/loading.gif" alt="로딩이미지"></div>
+        <div class="col my-5">
+          <img src="/images/loading.gif" alt="로딩이미지">
+        </div>
       </div>
-
+<!-- 
+  pageName은 변수, routes 폴더에 생성된 라우팅을 담당하는 파일에 선언된 변수 
+  pageName에는 쿼테이션이 없다, 그러면 변수명이다. board/read.ejs
+-->
       <%-include(pageName)%>
       <%-include("footer.ejs")%>
+      <%-include("common/modal_alert.ejs")%>
+
     </div>    
   </body>
   <script>

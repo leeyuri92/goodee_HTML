@@ -1,12 +1,15 @@
 #!/usr/bin/env node
 
 /**
- * Module dependencies.
+ * Module dependencies.- 모듈사이에 의존관계가 있을 수 있다.
+ * <script type = mudule> import문 사용 </script>
+ * require예약어는 node_modules에서 가져온다 - 의존성주입을 받음
+ * nodejs기반으로 플젝을 진행할 때는 require를 사용해야한다.
  */
 
 var app = require('../app');
 var debug = require('debug')('mybook:server');
-var http = require('http');
+var http = require('http'); // 브라우저에 사용되는 프로토콜 - stateless - 요청가능
 
 /**
  * Get port from environment and store in Express.
