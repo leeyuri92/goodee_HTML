@@ -11,5 +11,11 @@ router.get('/cart', function(req, res, next) {
 router.get('/join', function(req, res, next) {
   res.render('index',{title : '회원가입', pageName : 'users/join.ejs'}); 
 });
-
+router.get('/mypage', function(req, res, next) {
+  res.render('index',{title : 'MyPage', pageName : 'users/mypage.ejs'}); 
+});
+router.get('/update', function(req, res, next) {
+  res.render('index',{title : '회원정보수정', pageName : 'users/update.ejs'}); 
+});
+//  🧡🧡🧡🧡소스 가져올 곳🧡🧡🧡🧡
 module.exports = router;

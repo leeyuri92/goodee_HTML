@@ -36,10 +36,12 @@
     where, 
     getDoc,
     orderBy,
-    doc 
+    doc,
+    deleteDoc 
   } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
   
   const db = getFirestore(app);
+  const email = localStorage.getItem("email");
   // 파라미터로 넘긴 값을 받아올 수 있나? - req.params.id;(index.js)
   const id = "<%=id%>";
   console.log(id);
@@ -54,4 +56,28 @@
   // handlebars에 대한 링크가 없어도 SPA로 처리되고 있어서 참조할 수 있다.
   let temp = Handlebars.compile($("#temp").html());
   $("#board").html(temp(row))
+
+  // localStorage에 담겨(언제담앗지?-로그인할때)있는 이멜 주소와
+  // Firestore Database에서 꺼내온 한 개 로우가 쥐고있는 이멜주소가 같으면
+  // 수정버튼과 삭제버튼 모두 표시 , 같지않으면 나타나지않음
+  if(email==row.email){
+    $("#btn-group").toggle();
+  }
+  // 두번째 주의사항 - arrow function(호이스팅이슈가 없다)과 function(호이스팅이슈)을 잘 구분해서 사용할 것
+  // 게시글 수정하기 구현
+  $('#btn-update').on('click',async function(){  // 비동기처리 구간 - Promise -> async or await
+    // firestore database 연동이 필요없는 상황임
+    // 수정페이지로 이동해서 수정할 내용을 작성한 다음에 db연동이 필요하니까 - 페이지이동만 처리할께
+    location.href = "/board/update/"+id;
+  })
+
+  // 게시글 삭제하기 구현
+  $('#btn-delete').on('click',async function(){  // 비동기처리 구간 - Promise -> async or await
+    if(confirm(id+"번 게시글 삭제할거니?")){
+      await deleteDoc(doc(db,`board/${id}`));
+      // 삭제되고나면 목록페이지로 이동
+      location.href="/board";  // 404발동하면 routes - index.js이거나 users.js확인
+    }
+  })
+
 </script>

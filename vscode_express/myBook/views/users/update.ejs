@@ -1,0 +1,66 @@
+<div class="row my-5">
+  <div class="col">
+    <h1 class="text-center mb-5">회원정보수정</h1>
+    <div class="card p-5">
+      <form name="frm" method="post">
+        <div class="input-group my-2">
+          <div class="input-group-text px-5">성명</div>
+          <input class="form-control" name="name" value="나잘난" />
+        </div>
+        <div class="input-group my-2">
+          <div class="input-group-text px-5">주소</div>
+          <input
+            class="form-control"
+            name="address"
+            value="서울특별시 금천구 가산디지털2로 95 KM타워 3층 307호 Top Camp"
+          />
+        </div>
+        <div class="input-group my-2">
+          <div class="input-group-text px-5">전화</div>
+          <input class="form-control" name="phone" value="010-1010-2020" />
+        </div>
+        <div>
+          <img
+            id="fileName"
+            src="https://via.placeholder.com/200x200"
+            width="30%"
+          />
+          <input class="form-control mt-2" type="file" name="file" />
+        </div>
+        <div class="text-center mt-3">
+          <button class="btn-primary btn px-5">정보수정</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- 🧡🧡🧡🧡소스 가져올 곳🧡🧡🧡🧡 -->
+<script>
+  $(frm).on('submit',async (event) => {
+    event.preventDefault();
+    if(window.confirm("회원정보 변경하시겠습니까?")){
+      let name = $(frm.name).val();
+      let address = $(frm.address).val();
+      let phone = $(frm.phone).val();
+      let email = $(frm.email).val();
+      if(frm.file.files[0]){
+        const snapshot = await uploadBytes(
+          ref(storage,`/photo/${Date.now()}.jpg`),frm.file.files[0])
+          const url = await getDownloadURL
+          await setDoc(doc(db,`users/${uid}`),{
+            email, name, address, phonne,photo
+          })
+      }
+    }
+    else {
+      const photo = $("#fileName").attr('src')
+      await setDoc(doc(db,`users/${uid}`),{
+        email, name, address, phonne,photo
+      })
+    }
+    $(frm.file).on('change',function(e){
+      $("fileName").attr("src",URL.createObjectURL(e.target.files(0)))
+    })
+  })
+</script>

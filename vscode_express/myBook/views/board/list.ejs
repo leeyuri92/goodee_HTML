@@ -1,3 +1,19 @@
+<style>
+  .heart0,
+  .heart1 {
+    cursor: pointer;
+    float: right;
+    color: red;
+    font-size: 1.5rem;
+  }
+  .fcnt {
+    font-size: 0.5rem;
+    float: right;
+    margin-top: 15px;
+  }
+</style>
+
+
 <div class="row my-2">
   <div class="col">
       <h1 class="text-center mb-2">게시글</h1>
@@ -14,18 +30,30 @@
 </div>
 
 <!--게시글목록 템플릿 : 템플릿에서 JSON 데이터 안의 JSON 데이터는 . 으로 호출한다.-->
-  <script id="temp" type="text/x-handlebars-template">
-    {{#each .}}
-    <div class="card my-2" style="font-size:0.8rem">
-      <div class="card-body">
-        <a href="/board/{{ id }}"><h5>{{ title }}</h5></a>
-        <div class="ellipsis2">{{ body }}</div>
-      </div>    
-      <div class="card-footer">
-      <span> Posted on {{ date }} by {{ email }} </span>
+<script id="temp" type="text/x-handlebars-template">
+{{#each .}}
+  <div class="card my-2" style="font-size:0.8rem">
+    <div class="card-body">
+      <a href="/board/{{ id }}"><h5>{{ title }}</h5></a>
+      <div class="ellipsis2">{{ body }}</div>
+    </div>    
+    <div class="card-footer">
+      <span>Posted on {{ date }} by {{ email }}</span>
+      <span class="heart{{ ucnt }}" id="{{ id }}">
+        <span>{{ heart ucnt}}</span>
+        <span class="fcnt">{{ fcnt }}</span>
+      </span>
     </div>
-    {{/each}}
-  </script>
+  </div>
+  {{/each}}
+</script>
+
+<script>
+  Handlebars.registerHelper("heart",function(ucnt){
+    if(ucnt == 0) return "🤍";
+    else return "🩷";
+  })
+</script>
 
 <script type="module">
 import {app} from "/javascripts/firebase.js";
@@ -47,21 +75,76 @@ const db = getFirestore(app);
 let page = 1;
 
 getList();
+
+$('#btn-next').on('click', function () {
+    page++;
+    getList();
+  });
+  $('#btn-prev').on('click', function () {
+    page--;
+    getList();
+  });
+
+
 // arrow function은 호이스팅이 이루지지 않아 함수호출은 마지막에
 // getList = async() => {  
 async function getList(){
-  const q = query(collection(db,"board"),orderBy("date","desc"))
-  const snapshot = await getDocs(q);
-  let rows = [];
-  snapshot.forEach((row) => {
-    //console.log(`${element},${index}`);
-    //console.log(arr);
-    //console.log(element.data());
-    console.log(row.id);
-    rows.push({id:row.id, ...row.data()})
-    console.log(rows);
-    let temp = Handlebars.compile($("#temp").html());
-    $("#boards").html(temp(rows));
+  const q = query(collection(db, 'board'), orderBy('date', 'desc'));
+    const snapshot = await getDocs(q);
+    let rows = [];
+    console.log(snapshot.docs);
+    console.log(snapshot.docs.length); //총레코드 수
+    snapshot.docs.forEach(async (row, index) => {
+    console.log(index);
+    //한 페이지에 몇개씩 보여줄까?
+    let size = 3;
+    //마지막 페이지의 숫자를 구하는 공식은? - 총레코드숫자
+    let last = Math.ceil(snapshot.docs.length / size);
+    //시작 페이지의 숫자 구하기
+    let start = (page - 1) * size;
+    let end = page * size - 1;
+    if (index >= start && index <= end) {
+    //글목록만 가져오지 말고 좋아요에 대한 정보도 같이 머지(merge)한다
+      const q1 = query(
+        collection(db, 'favorite'),
+        where('pid', '==', row.id)
+      );
+      const snap1 = await getDocs(q1);
+      const q2 = query(
+        collection(db, 'favorite'),
+        where('pid', '==', row.id),
+        where('email', '==', email)
+      );
+      const snap2 = await getDocs(q2);
+      //console.log(`${element} ${index} ${arr}`);
+      //console.log(arr); //배열이 2번 출력될것이다
+      console.log(row.id);
+      //1차 머지한 부분: 해당 글의 아이디값을 가져와서 배열에 추가하기 - 고민
+      //여기 - 여러개의 쿼리문을 병합하는 코드 - spread연산자(원본) ->  열거형 연산자 활용 - 새로운 배열객체생성함
+      //여기가 어렵다
+      rows.push({
+        id: row.id,
+        ...row.data(),
+        fcnt: snap1.docs.length,
+        ucnt: snap2.docs.length,
+      });
+      console.log(rows); //원본에 id키를 갖는 값이 들어갔나요?
+      let temp = Handlebars.compile($('#temp').html());
+      $('#boards').html(temp(rows));
+ /*  페이징 처리 UI 추가 */
+      if (snapshot.docs.length > 0) {
+      //조회된 결과가 있어?
+      $('#btn-group').show();
+    }
+      $('#span-page').html(page + '/' + last);
+      //너가 첫페이지니?  응 - 이전버튼은 비활성화 한다.
+      if (page == 1) $('#btn-prev').attr('disabled', true);
+      else $('#btn-prev').attr('disabled', false);
+      //너 마지막 페이지야?
+      if (page == last) $('#btn-next').attr('disabled', true);
+      else $('#btn-next').attr('disabled', false);
+      /*  페이징 처리 UI 추가 */
+    } //end of if
   });
 }
 </script>
@@ -78,5 +161,30 @@ async function getList(){
     else{
       location.href = "/login";
     }
+  })
+
+  // 좋아요 추가
+  $("#boards").on("click",".heart0", async function(){
+    let id= $(this).attr("id")
+    if(email){
+      await addDoc(collection(db,"favorite"),{pid:id,email:email});
+      alert("좋아요 추가");
+      getList();
+    } else {  //  이멜이 없는 경우는 로그인을 안한 경우이거나 로그인이 풀린경우
+      location.href = "/login"
+    }
+  })
+  // 좋아요 삭제
+  $("#boards").on("click",".heart1", async function(){
+    let id= $(this).attr("id")
+    // 먼저 어떤 글에 대한 좋아요 삭제인지 조회하기
+    const q = query(collection(db,"favorite"), where("pid","==",id), where("email","==",email));
+    const snapshot = await getDocs(q);
+    snapshot.forEach((row) => {
+      deleteDoc(doc(db,"favorite",row.id));
+      alert("좋아요 삭제");
+      // Realtime database제품이 아니라서 삭제한 결과가 화면에 갱신처리 해야함
+      getList();
+    })
   })
 </script>

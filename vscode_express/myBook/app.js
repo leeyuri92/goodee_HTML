@@ -26,6 +26,7 @@ var app = express();
 //익스프레스에서 사용할 템플릿 엔진을 설정하는 코드임
 //__dirname은 현재 디렉토리를 의미하며 path.join()함수는 경로를 연결하는 기능을 함
 app.set('views', path.join(__dirname, 'views'));
+// ejs가 아닌 html확장자는 호출이 불가 - app.js에 html에 대한 마임타입이 정의되어 있지 않다.
 app.set('view engine', 'ejs');//템플릿엔진의 종류
 //파라미터에 지정된 인자를 실행하는 함수임
 //여기서는 각각의 모듈을 사용하도록 설정함
